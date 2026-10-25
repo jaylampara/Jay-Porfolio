@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>drive param test</title>
+<style>body{background:#111;color:#eee;font:13px monospace;margin:0;padding:10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.cell{display:flex;flex-direction:column;gap:4px}
+.cell b{color:#c8ff34}
+iframe{width:100%;aspect-ratio:16/9;background:#000;border:1px solid #333}
+</style></head>
+<body>
+<div class="grid" id="grid"></div>
+<script>
+const variants = [
+  ['1WUtsA autoplay+mute=1+loop=1', `https://drive.google.com/file/d/1WUtsADh85mdsjX5GsKjkotjvvnUTt6to/preview?rm=minimal&autoplay=1&mute=1&loop=1`],
+  ['1PfkJa autoplay+mute=1+loop=1', `https://drive.google.com/file/d/1PfkJafcTXEpeLRgJvHajQL8NMVT7c7y3/preview?rm=minimal&autoplay=1&mute=1&loop=1`],
+  ['1oV control (no autoplay)', `https://drive.google.com/file/d/1oV_Gno1NfeMZiee6Sw3-jelXZrYdsb_f/preview?rm=minimal`],
+  ['1oV autoplay only', `https://drive.google.com/file/d/1oV_Gno1NfeMZiee6Sw3-jelXZrYdsb_f/preview?rm=minimal&autoplay=1`],
+];
+document.getElementById('grid').innerHTML = variants.map(([label, src]) =>
+  `<div class="cell"><b>${label}</b><iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" title="${label}"></iframe></div>`).join('');
+</script>
+</body>
+</html>

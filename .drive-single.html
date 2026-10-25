@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>drive single test</title>
+<style>body{background:#111;color:#eee;font:13px monospace;margin:0;padding:10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.cell{display:flex;flex-direction:column;gap:4px}
+.cell b{color:#c8ff34}
+iframe{width:100%;aspect-ratio:16/9;background:#000;border:1px solid #333}
+</style></head>
+<body>
+<div class="grid" id="grid"></div>
+<script>
+const ID = '1WUtsADh85mdsjX5GsKjkotjvvnUTt6to';
+const variants = [
+  ['135s video: autoplay+mute=1', `https://drive.google.com/file/d/${ID}/preview?rm=minimal&autoplay=1&mute=1`],
+  ['135s video: autoplay+mute=0', `https://drive.google.com/file/d/${ID}/preview?rm=minimal&autoplay=1&mute=0`],
+];
+document.getElementById('grid').innerHTML = variants.map(([label, src]) =>
+  `<div class="cell"><b>${label}</b><iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" title="${label}"></iframe></div>`).join('');
+</script>
+</body>
+</html>
