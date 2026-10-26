@@ -1732,7 +1732,7 @@ const SHOWCASE_VIDEO_EXTS = ['mp4', 'mov', 'webm'];
 const SHOWCASE_MEDIA_PATTERN = new RegExp(`\\.(${[...SHOWCASE_IMAGE_EXTS, ...SHOWCASE_VIDEO_EXTS].join('|')})$`, 'i');
 const showcaseNumericKey = (value) => { const match = decodeURIComponent(value).match(/(\d+)/); return match ? Number(match[1]) : 99; };
 
-const listShowcaseDirectory = async (path) => {
+const fetchShowcaseHtmlListing = async (path) => {
   try {
     const response = await fetch(path);
     if (!response || !response.ok || !response.headers.get('Content-Type')?.includes('text/html')) return null;
@@ -1743,6 +1743,86 @@ const listShowcaseDirectory = async (path) => {
   } catch (error) {
     return null;
   }
+};
+
+/* GitHub Pages has no directory indexes: a folder URL is a 404, so the galleries
+   cannot discover subfolders there. Use the public repo tree as the listing instead;
+   it follows every upload without rebuilding anything. The fallback repo also keeps
+   custom domains and listing-less static hosts working. */
+const SHOWCASE_GITHUB_FALLBACK = { owner: 'jaylampara', repo: 'Porfolio' };
+const SHOWCASE_TREE_TTL = 5 * 60 * 1000;
+let showcaseTreeRequest = null;
+
+const showcaseGithubRepo = () => {
+  if (location.protocol === 'file:') return null;
+  const projectHost = location.hostname.match(/^([\w-]+)\.github\.io$/i);
+  if (projectHost) {
+    const [repo] = location.pathname.split('/').filter(Boolean);
+    return { owner: projectHost[1], repo: repo || `${projectHost[1]}.github.io` };
+  }
+  return SHOWCASE_GITHUB_FALLBACK;
+};
+
+const fetchShowcaseGithubTree = () => {
+  if (showcaseTreeRequest) return showcaseTreeRequest;
+  const repo = showcaseGithubRepo();
+  if (!repo) return Promise.resolve(null);
+  showcaseTreeRequest = (async () => {
+    const cacheKey = `showcase-tree:${repo.owner}/${repo.repo}`;
+    try {
+      const cached = JSON.parse(window.sessionStorage.getItem(cacheKey) || 'null');
+      if (cached && Array.isArray(cached.entries) && Date.now() - cached.at < SHOWCASE_TREE_TTL) return cached.entries;
+    } catch (error) { /* storage disabled */ }
+    try {
+      const headers = { Accept: 'application/vnd.github+json' };
+      const repoResponse = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}`, { headers });
+      if (!repoResponse.ok) return null;
+      const repoInfo = await repoResponse.json();
+      const branch = repoInfo.default_branch || 'main';
+      const treeResponse = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}/git/trees/${encodeURIComponent(branch)}?recursive=1`, { headers });
+      if (!treeResponse.ok) return null;
+      const tree = await treeResponse.json();
+      if (tree.truncated || !Array.isArray(tree.tree)) return null;
+      const entries = tree.tree
+        .filter((entry) => entry && typeof entry.path === 'string')
+        .map((entry) => ({ path: entry.path, dir: entry.type === 'tree' }));
+      try { window.sessionStorage.setItem(cacheKey, JSON.stringify({ at: Date.now(), entries })); } catch (error) { /* ignore */ }
+      return entries;
+    } catch (error) {
+      return null;
+    }
+  })();
+  return showcaseTreeRequest;
+};
+
+const showcaseGithubDirectory = async (path) => {
+  const entries = await fetchShowcaseGithubTree();
+  if (!entries) return null;
+  let folder = path;
+  try { folder = decodeURIComponent(path); } catch (error) { /* keep the raw path */ }
+  folder = folder.replace(/^\.?\//, '').replace(/\/+$/, '');
+  if (!folder) return null;
+  const prefix = `${folder}/`;
+  const children = new Set();
+  entries.forEach((entry) => {
+    if (!entry.path.startsWith(prefix)) return;
+    const rest = entry.path.slice(prefix.length);
+    if (!rest) return;
+    const slash = rest.indexOf('/');
+    const name = slash === -1 ? rest : rest.slice(0, slash);
+    if (!name || name.startsWith('.')) return;
+    children.add((slash !== -1 || entry.dir) ? `${name}/` : name);
+  });
+  return children.size ? Array.from(children) : null;
+};
+
+const listShowcaseDirectory = async (path) => {
+  /* localhost and traditional hosts: a real directory index is the freshest source */
+  if (!/\.github\.io$/i.test(location.hostname)) {
+    const listing = await fetchShowcaseHtmlListing(path);
+    if (listing) return listing;
+  }
+  return showcaseGithubDirectory(path);
 };
 
 const showcaseCleanLabel = (name) => decodeURIComponent(name).replace(/\/$/, '').replace(/^\d+[\s._-]*/, '').trim() || 'Samples';
