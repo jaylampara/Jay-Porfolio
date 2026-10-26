@@ -163,7 +163,28 @@ html[data-theme="light"] .portrait-burst img { border-color: rgba(13,127,102,.6)
 @keyframes typing-dot { 0%, 100% { opacity: .25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
 .art-editorial { background: #948173; padding: 10%; color: #12100f; }.art-editorial span { font: 9px var(--mono); line-height: 1.45; }.art-editorial strong { display: block; font: 500 clamp(26px, 3.2vw, 44px)/.86 var(--display); letter-spacing: -.08em; margin: 16px 0 0 21%; }.art-editorial em { font-style: normal; color: #eef7e8; }.art-editorial i { position: absolute; height: 34%; width: 34%; background: #c9ff36; bottom: 11%; left: 9%; border-radius: 50% 43% 36% 57%; mix-blend-mode: screen; }
 
-.marquee-section { overflow: hidden; padding-block: 27px; border-block: 1px solid var(--line); }.marquee-label { color: #72807b; font: 9px var(--mono); letter-spacing: .12em; padding: 0 0 20px max(48px, calc((100vw - 1380px)/2)); }.marquee-label span { color: var(--acid); margin-left: 8px; }.marquee { overflow: hidden; }.marquee-track { width: max-content; display: flex; align-items: center; gap: 46px; animation: marquee 35s linear infinite; }.marquee-track span { color: #d2ded8; font: 500 20px var(--display); letter-spacing: -.04em; white-space: nowrap; }.marquee-track span::after { content: '✦'; color: var(--acid); font-size: 12px; padding-left: 46px; vertical-align: middle; }
+/* -------- compact client reviews marquee -------- */
+.reviews-section { border-top: 1px solid var(--line); padding-block: 23px 24px; overflow: hidden; }
+.reviews-section .marquee-label { padding-bottom: 14px; }
+.reviews-viewport { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.reviews-track { width: max-content; display: flex; animation: reviews-marquee 60s linear infinite; will-change: transform; }
+.reviews-track:hover, .reviews-track:focus-within { animation-play-state: paused; }
+.reviews-group { display: flex; gap: 10px; padding-right: 10px; }
+.review-card { flex: none; width: 330px; min-height: 70px; display: flex; gap: 11px; padding: 9px 10px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.012)); }
+.review-photo { flex: 0 0 50px; width: 50px; height: 50px; object-fit: cover; border: 1px solid rgba(200,255,52,.3); background: #101715; }
+.review-photo-empty { display: grid; place-items: center; color: var(--acid); font: 19px var(--display); background: radial-gradient(circle at 35% 30%, rgba(111,255,212,.14), transparent 65%), #0e1512; }
+.review-body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.review-message { margin: 0; color: #b6c2bd; font: 11px/1.45 var(--sans); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.review-stars { margin-top: auto; display: flex; align-items: center; gap: 2px; color: var(--acid); font: 9px/1 var(--mono); letter-spacing: .04em; }
+.review-stars span { display: block; line-height: 1; }
+.review-stars .is-off { color: rgba(218,250,242,.18); }
+@keyframes reviews-marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .reviews-track { animation: none; } .reviews-viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; } }
+@media (max-width: 570px) { .reviews-section { padding-block: 19px 21px; } .review-card { width: 286px; } }
+
+.marquee-section { overflow: hidden; padding-block: 27px; border-block: 1px solid var(--line); }
+.reviews-section + .marquee-section { border-top: 0; }
+.marquee-label { color: #72807b; font: 9px var(--mono); letter-spacing: .12em; padding: 0 0 20px max(48px, calc((100vw - 1380px)/2)); }.marquee-label span { color: var(--acid); margin-left: 8px; }.marquee { overflow: hidden; }.marquee-track { width: max-content; display: flex; align-items: center; gap: 46px; animation: marquee 35s linear infinite; }.marquee-track span { color: #d2ded8; font: 500 20px var(--display); letter-spacing: -.04em; white-space: nowrap; }.marquee-track span::after { content: '✦'; color: var(--acid); font-size: 12px; padding-left: 46px; vertical-align: middle; }
 
 .contact { min-height: 700px; padding-block: 143px 120px; display: grid; grid-template-columns: 1fr 1fr; gap: 110px; }.contact-pre { color: #aab4b0; line-height: 1.6; max-width: 410px; margin: 45px 0 16px; }.email-link { font: 12px var(--mono); color: var(--acid); border-bottom: 1px solid rgba(200,255,52,.46); padding-bottom: 7px; display: inline-flex; gap: 15px; margin-top: 38px; }.email-link span { font-size: 17px; margin-top: -3px; }.contact-form { padding-top: 23px; }.contact-form label { display: block; border-bottom: 1px solid var(--line); padding: 0 0 12px; margin-bottom: 24px; }.contact-form label > span { display: block; color: #84908b; font: 9px var(--mono); letter-spacing: .13em; margin-bottom: 11px; }.contact-form input, .contact-form textarea, .contact-form select { width: 100%; color: #e8f1ed; border: 0; outline: 0; background: transparent; font: 14px var(--sans); resize: vertical; }.contact-form select { cursor: pointer; }.contact-form option { background: #101313; }.contact-form input::placeholder, .contact-form textarea::placeholder { color: #65716c; }.submit-button { color: #0e1607; background: var(--acid); border: 0; height: 55px; padding: 0 18px; width: 100%; display: flex; align-items: center; justify-content: space-between; font: 11px var(--mono); transition: box-shadow .2s, transform .2s; }.submit-button span { font-size: 18px; }.submit-button:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -12px rgba(200,255,52,.75); }
 .contact-status { margin: 14px 0 0; font: 10px/1.65 var(--mono); letter-spacing: .03em; color: #84908b; }
@@ -233,6 +254,11 @@ html[data-theme="light"] .resume-button { border-color: rgba(97,134,0,.55); }
 html[data-theme="light"] .contact-form input, html[data-theme="light"] .contact-form textarea, html[data-theme="light"] .contact-form select { color: #10161a; }
 html[data-theme="light"] .contact-form select option { background: #ebeee8; }
 html[data-theme="light"] .marquee-track span { color: #26312b; }
+html[data-theme="light"] .review-card { background: linear-gradient(145deg, rgba(16,54,40,.055), rgba(0,0,0,.012)); }
+html[data-theme="light"] .review-message { color: #4e5b54; }
+html[data-theme="light"] .review-photo { border-color: rgba(97,134,0,.35); background: #e7ece5; }
+html[data-theme="light"] .review-photo-empty { background: radial-gradient(circle at 35% 30%, rgba(13,127,102,.14), transparent 65%), #edf2eb; }
+html[data-theme="light"] .review-stars .is-off { color: rgba(10,30,20,.16); }
 html[data-theme="light"] .work-note { color: #5d6a63; }
 
 /* glass cards on pale surfaces */
@@ -649,6 +675,13 @@ html[data-theme="light"] .project:hover .project-art { box-shadow: 0 26px 46px -
             <div class="project-art art-editorial" data-archive-open role="button" tabindex="0" aria-label="Open Archive No. 09 sample works"><span>ARCHIVE<br />/ 09</span><strong>A study<br />in digital<br /><em>presence.</em></strong><i></i></div>
             <div class="project-meta"><div><span class="project-type">Web design / Editorial</span><h3>Archive No. 09</h3></div><a href="#contact" aria-label="Ask about Archive No. 09 project">↗</a></div>
           </article>
+        </div>
+      </section>
+
+      <section class="reviews-section" id="reviews" aria-labelledby="reviews-label" data-reviews hidden>
+        <div class="marquee-label" id="reviews-label">CLIENT SIGNALS / REVIEWS <span>✦</span></div>
+        <div class="reviews-viewport">
+          <div class="reviews-track" data-reviews-track></div>
         </div>
       </section>
 
@@ -2252,6 +2285,190 @@ createFolderShowcase({ key: 'archive', folder: 'archive-no-09', kicker: 'JAY LAM
 createFolderShowcase({ key: 'motion', folder: 'move-with-intent', kicker: 'JAY LAMPARA / MOVE WITH INTENT', title: 'Sample Works' });
 createFolderShowcase({ key: 'showreel', folder: 'conversion-engine', kicker: 'JAY LAMPARA / SHOWREEL', title: 'Sample Works' });
 createFolderShowcase({ key: 'graphics', folder: 'graphics', kicker: 'JAY LAMPARA / GRAPHICS DESIGN', title: 'Sample Works' });
+
+/* ---------- folder-driven client reviews (reviews/*.txt + matching photo) ---------- */
+const REVIEW_IMAGE_EXTS = [...SHOWCASE_IMAGE_EXTS, 'svg'];
+const REVIEW_IMAGE_PATTERN = new RegExp(`\\.(${REVIEW_IMAGE_EXTS.join('|')})$`, 'i');
+let reviewEntriesCache = [];
+let reviewResizeTimer = 0;
+
+/* One review per numbered .txt file: "stars:" (1–5) and "message:" are all it
+   needs; its photo is the image file with the same number (1.txt → 1.jpg). */
+const parseReviewText = (text) => {
+  const review = { stars: 5, message: '', image: '' };
+  const messageLines = [];
+  let inMessage = false;
+  text.split(/\r?\n/).forEach((line) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('#')) return;
+    if (!trimmed) { if (inMessage) messageLines.push(''); return; }
+    const field = trimmed.match(/^(stars?|rating|message|quote|review|image)\s*:\s*(.*)$/i);
+    if (field) {
+      const key = field[1].toLowerCase();
+      const value = field[2].trim();
+      inMessage = false;
+      if (key === 'stars' || key === 'star' || key === 'rating') {
+        const starCount = (value.match(/★/g) || []).length;
+        const numeric = Number.parseFloat(value);
+        if (starCount) review.stars = starCount;
+        else if (Number.isFinite(numeric)) review.stars = numeric;
+      } else if (key === 'image') {
+        review.image = value;
+      } else {
+        inMessage = true;
+        messageLines.push(value);
+      }
+      return;
+    }
+    if (inMessage) messageLines.push(trimmed);
+  });
+  const numericStars = Math.round(Number(review.stars));
+  review.stars = Number.isFinite(numericStars) ? Math.max(1, Math.min(5, numericStars)) : 5;
+  review.message = messageLines.join(' ').replace(/\s+/g, ' ').trim();
+  return review;
+};
+
+const reviewImagePath = (value) => {
+  const name = value.trim();
+  if (!name || /^(?:[a-z]+:)?\/\//i.test(name) || name.startsWith('/') || name.startsWith('./') || name.startsWith('../')) return name;
+  return `reviews/${name.replace(/^\.?\//, '')}`;
+};
+
+const loadReviewEntry = async (href, key, imageFiles = null) => {
+  try {
+    const response = await fetch(`reviews/${href}`);
+    if (!response.ok) return null;
+    const text = await response.text();
+    if (/^\s*<(?:!doctype|html)/i.test(text)) return null;
+    const review = parseReviewText(text);
+    if (!review.message) return null;
+    const matchedImage = imageFiles?.get(key) || '';
+    return {
+      key,
+      stars: review.stars,
+      message: review.message,
+      image: review.image ? reviewImagePath(review.image) : matchedImage ? `reviews/${matchedImage}` : ''
+    };
+  } catch (error) {
+    return null;
+  }
+};
+
+/* strict static hosts cannot list a folder — probe numbered slots like the galleries */
+const probeReviewEntries = async () => {
+  const slots = await Promise.all(Array.from({ length: 24 }, (_, index) => (async () => {
+    const key = index + 1;
+    const review = await loadReviewEntry(`${key}.txt`, key);
+    if (!review || review.image) return review;
+    for (const extension of REVIEW_IMAGE_EXTS) {
+      const found = await probeSource(`reviews/${key}.${extension}`);
+      if (found) { review.image = found; break; }
+    }
+    return review;
+  })()));
+  return slots.filter(Boolean);
+};
+
+const loadReviewEntries = async () => {
+  const listing = await listShowcaseDirectory('reviews/');
+  if (listing === null) return probeReviewEntries();
+  const textFiles = listing.filter((href) => /\.txt$/i.test(href) && !/readme\.txt$/i.test(href));
+  if (!textFiles.length) return [];
+  const imageFiles = new Map();
+  listing.filter((href) => REVIEW_IMAGE_PATTERN.test(href)).forEach((href) => {
+    const key = showcaseNumericKey(href);
+    if (!imageFiles.has(key)) imageFiles.set(key, href);
+  });
+  const reviews = await Promise.all(textFiles.map((href) => loadReviewEntry(href, showcaseNumericKey(href), imageFiles)));
+  return reviews.filter(Boolean).sort((a, b) => a.key - b.key);
+};
+
+const buildReviewCard = (review) => {
+  const card = document.createElement('article');
+  card.className = 'review-card';
+  if (review.image) {
+    const image = document.createElement('img');
+    image.className = 'review-photo';
+    image.src = review.image;
+    image.alt = '';
+    image.decoding = 'async';
+    image.width = 50;
+    image.height = 50;
+    image.addEventListener('error', () => {
+      const fallback = document.createElement('span');
+      fallback.className = 'review-photo review-photo-empty';
+      fallback.setAttribute('aria-hidden', 'true');
+      fallback.textContent = '✦';
+      image.replaceWith(fallback);
+    });
+    card.append(image);
+  } else {
+    const fallback = document.createElement('span');
+    fallback.className = 'review-photo review-photo-empty';
+    fallback.setAttribute('aria-hidden', 'true');
+    fallback.textContent = '✦';
+    card.append(fallback);
+  }
+  const body = document.createElement('div');
+  body.className = 'review-body';
+  const message = document.createElement('p');
+  message.className = 'review-message';
+  message.textContent = review.message;
+  message.title = review.message;
+  const stars = document.createElement('div');
+  stars.className = 'review-stars';
+  stars.setAttribute('role', 'img');
+  stars.setAttribute('aria-label', `${review.stars} out of 5 stars`);
+  for (let index = 1; index <= 5; index += 1) {
+    const star = document.createElement('span');
+    star.textContent = '★';
+    if (index > review.stars) star.className = 'is-off';
+    stars.append(star);
+  }
+  body.append(message, stars);
+  card.append(body);
+  return card;
+};
+
+const renderReviewMarquee = (reviews) => {
+  const section = document.querySelector('[data-reviews]');
+  const track = section?.querySelector('[data-reviews-track]');
+  const viewport = section?.querySelector('.reviews-viewport');
+  if (!section || !track || !viewport || !reviews.length) return;
+  section.hidden = false;
+  track.replaceChildren();
+  const group = document.createElement('div');
+  group.className = 'reviews-group';
+  const cards = reviews.map(buildReviewCard);
+  cards.forEach((card) => group.append(card));
+  track.append(group);
+  /* two equal halves make translateX(-50%) loop without a seam; repeat the set
+     inside each half until one half is at least as wide as the viewport */
+  let copies = 0;
+  while (group.scrollWidth < viewport.clientWidth && copies < 24) {
+    cards.forEach((card) => {
+      const copy = card.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      group.append(copy);
+    });
+    copies += 1;
+  }
+  const mirror = group.cloneNode(true);
+  mirror.setAttribute('aria-hidden', 'true');
+  track.append(mirror);
+  track.style.animationDuration = `${Math.max(30, Math.round(group.scrollWidth / 38))}s`;
+};
+
+loadReviewEntries().then((reviews) => {
+  reviewEntriesCache = reviews;
+  renderReviewMarquee(reviews);
+});
+
+window.addEventListener('resize', () => {
+  if (!reviewEntriesCache.length) return;
+  window.clearTimeout(reviewResizeTimer);
+  reviewResizeTimer = window.setTimeout(() => renderReviewMarquee(reviewEntriesCache), 180);
+});
 
 /* ---------- contact inquiry → auto-filled mailto ---------- */
 const INQUIRY_EMAIL = 'jayaganglampara@gmail.com';
