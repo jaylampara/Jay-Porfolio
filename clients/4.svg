@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" role="img" aria-label="Jazuzzi Dreams">
+  <g fill="#7d8d86">
+    <rect x="16" y="26" width="9" height="28" rx="4.5"/>
+    <rect x="31" y="18" width="9" height="44" rx="4.5"/>
+    <rect x="46" y="31" width="9" height="18" rx="4.5"/>
+  </g>
+  <text x="72" y="40" fill="#9fb0a8" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="700" letter-spacing=".6">JAZUZZI</text>
+  <text x="72" y="58" fill="#6f8078" font-family="Helvetica, Arial, sans-serif" font-size="10" letter-spacing="4">DREAMS</text>
+</svg>
