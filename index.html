@@ -411,6 +411,11 @@ html[data-theme="light"] .showreel-videos.auto-orient .showreel-item img { borde
 .showreel-videos.auto-orient .showreel-item[data-poster="true"] .showreel-poster { object-fit: contain; object-position: center; cursor: pointer; }
 .showreel-item[data-poster="true"] .showreel-label { z-index: 4; }
 
+/* when every item in the mosaic is horizontal, center them neatly in the grid
+   while keeping their original span-2 size; the grid switches to a 2-col layout
+   so each horizontal tile fills a row and the whole block sits centred */
+.showreel-videos.mosaic-uniform-horizontal { justify-content: center; grid-template-columns: repeat(2, 1fr) !important; }
+
 html[data-theme="light"] .showreel-tab { color: #3c4842; border-color: rgba(10,30,20,.25); }
 html[data-theme="light"] .showreel-tab:hover, html[data-theme="light"] .showreel-tab.active { color: #f2f5f1; }
 html[data-theme="light"] .showreel-tab.active span { color: rgba(255,255,255,.55); }
@@ -1497,12 +1502,20 @@ const snapMediaRatio = (media) => {
     ? 'vertical'
     : Math.abs(native - 1) <= Math.abs(native - 16 / 9) ? 'square' : 'horizontal';
   media.style.aspectRatio = '';
+  /* a shape just changed — re-evaluate the uniform-horizontal centering for this gallery */
+  const gallery = item.closest('.showreel-videos');
+  if (gallery) layoutMosaicGallery(gallery);
 };
 
 /* size the mosaic rows so 1 row = 1 square cell (keeps every tile flush) */
 const layoutMosaicGallery = (gallery) => {
   if (!gallery) return;
-  if (!gallery.querySelector('.showreel-item[data-shape]')) { gallery.style.gridAutoRows = ''; return; }
+  if (!gallery.querySelector('.showreel-item[data-shape]')) { gallery.style.gridAutoRows = ''; gallery.classList.remove('mosaic-uniform-horizontal'); return; }
+  /* detect uniform orientation: when every shaped item is horizontal, switch to a
+     centred 2-column layout so the span-2 tiles fill each row neatly */
+  const shapedItems = gallery.querySelectorAll('.showreel-item[data-shape]');
+  const allHorizontal = shapedItems.length > 0 && Array.from(shapedItems).every((el) => el.dataset.shape === 'horizontal');
+  gallery.classList.toggle('mosaic-uniform-horizontal', allHorizontal);
   const style = getComputedStyle(gallery);
   const tracks = style.gridTemplateColumns.split(' ').filter(Boolean).length;
   if (!tracks) return;
